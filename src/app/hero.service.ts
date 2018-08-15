@@ -70,6 +70,18 @@ export class HeroService {
     );
   }
 
+  searchHeroes(searchTerm:string):Observable<Hero[]>{
+    if(!searchTerm.trim()){
+      return of([]);
+    }
+
+    return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${searchTerm}`)
+            .pipe(
+              tap(_=>this.log(`found heroes matching "${searchTerm}"`)),
+              catchError(this.handleError<Hero[]>('searchHeroes',[]))
+            );
+  }
+
 
   /**
  * Handle Http operation that failed.
